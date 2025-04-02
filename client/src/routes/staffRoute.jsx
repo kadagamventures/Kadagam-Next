@@ -9,22 +9,22 @@ import StaffReport from "../pages/staffs/staffReport";
 import LeavePage from "../pages/staffs/leavePage";
 
 /* Staff Task Management */
-import StaffTasks from "../pages/staffs/StaffTask/staffTask";
-import StaffAddTask from "../pages/staffs/StaffTask/staffAddtask";
-import StaffTaskList from "../pages/staffs/StaffTask/staffTasklist";
+import StaffTasks from "../pages/staffs/staffTask/staffTask";
+import StaffAddTask from "../pages/staffs/staffTask/staffAddtask";
+import StaffTaskList from "../pages/staffs/staffTask/staffTasklist";
 
 /* Staff Project Management */
-import StaffProject from "../pages/staffs/StaffProject/staffProject";
-import StaffAddProject from "../pages/staffs/StaffProject/staffAddproject";
-import StaffProjectList from "../pages/staffs/StaffProject/staffProjectlist";
+import StaffProject from "../pages/staffs/staffProject/staffProject";
+import StaffAddProject from "../pages/staffs/staffProject/staffAddproject";
+import StaffProjectList from "../pages/staffs/staffProject/staffProjectlist";
 
 /* Staff Management */
-import StaffMain from "../pages/staffs/StaffStaffs/staffMain";
-import StaffAdd from "../pages/staffs/StaffStaffs/staffAdd";
-import StaffList from "../pages/staffs/StaffStaffs/staffList";
+import StaffMain from "../pages/staffs/staffStaffs/staffMain";
+import StaffAdd from "../pages/staffs/staffStaffs/staffAdd";
+import StaffList from "../pages/staffs/staffStaffs/staffList";
 
 /* Office Rules Page */
-import OfficeRules from "../pages/staffs/OfficeRules";
+import OfficeRules from "../pages/staffs/officeRules";
 
 /* Authentication */
 import ForgotPassword from "../pages/auth/forgotPassword"; // ✅ Import Forgot Password Page
