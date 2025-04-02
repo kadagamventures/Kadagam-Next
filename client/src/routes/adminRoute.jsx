@@ -21,13 +21,13 @@ import AddTask from "../pages/admin/admintask/addTask";
 import TaskList from "../pages/admin/admintask/taskList";
 
 /* Reports */
-import ReportTabs from "../pages/admin/ReportLayout/reportTabs";
-import Reports from "../pages/admin/ReportLayout/reports";
-import Attendance from "../pages/admin/ReportLayout/attendance";
-import ReportTasks from "../pages/admin/ReportLayout/tasks";
-import ReportProjects from "../pages/admin/ReportLayout/reportprojects";
-import ReportStaff from "../pages/admin/ReportLayout/reportStaff";
-import LeaveList from "../pages/admin/ReportLayout/leaveList";
+import ReportTabs from "../pages/admin/reportLayout/reportTabs";
+import Reports from "../pages/admin/reportLayout/reports";
+import Attendance from "../pages/admin/reportLayout/attendance";
+import ReportTasks from "../pages/admin/reportLayout/tasks";
+import ReportProjects from "../pages/admin/reportLayout/reportprojects";
+import ReportStaff from "../pages/admin/reportLayout/reportStaff";
+import LeaveList from "../pages/admin/reportLayout/leaveList";
 
 /* Loading Screen */
 const LoadingScreen = () => (

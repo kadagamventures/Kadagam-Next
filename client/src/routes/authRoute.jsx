@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import AdminLogin from "../pages/auth/login";
-import StaffLogin from "../pages/auth/StaffLogin";
+import StaffLogin from "../pages/auth/staffLogin";
 
 
 /**
