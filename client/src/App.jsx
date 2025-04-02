@@ -7,7 +7,7 @@ import AdminRoute from "./routes/adminRoute";
 import StaffRoutes from "./routes/staffRoute";
 import ForgotPassword from "./pages/auth/forgotPassword";
 import ResetPassword from "./pages/auth/resetPassword";
-import DataComponent from "./components/DataComponents"; // Example usage
+import DataComponent from "./components/dataComponents"; // Example usage
 
 function App() {
   const auth = useSelector((state) => state.auth);
