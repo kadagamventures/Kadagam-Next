@@ -30,7 +30,7 @@ const performanceRoutes = require("./routes/performanceRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL ="https://kadagam-next.vercel.app/";
+const CLIENT_URL ="https://kadagam-next.vercel.app";
 
 // ✅ Connect to MongoDB & Redis
 (async () => {
