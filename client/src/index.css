@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+
+/* Glitter Animation for Floating Sparkles */
+@keyframes floatingGlitter {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(40px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.animate-glitter {
+  position: absolute;
+  animation: floatingGlitter 1.5s ease-out infinite forwards;
+}
+
+/* Glitter Shimmer Effect for Text */
+@keyframes shimmerGlitter {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glitter-text {
+  background: linear-gradient(45deg, #ffcc00, #ff6699, #ff33cc, #ffcc00);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerGlitter 3s infinite ease-in-out;
+  font-weight: bold;
+  position: relative;
+  display: inline-block;
+}
+
+/* Floating Glitter Particles */
+.glitter-text::after {
+  content: "✨";
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  font-size: 14px;
+  opacity: 0.8;
+  animation: floatingGlitter 1.5s ease-out infinite alternate;
+}
