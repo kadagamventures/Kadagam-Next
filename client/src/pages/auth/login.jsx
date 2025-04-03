@@ -32,11 +32,9 @@ const AdminLogin = () => {
 
     try {
       const actionResult = await dispatch(loginUser(credentials));
-
       const result = actionResult.payload;
 
       if (loginUser.fulfilled.match(actionResult)) {
-        // Optional check: if role must be "admin"
         if (result.role === "admin") {
           navigate("/admin/dashboard");
         } else {
@@ -80,7 +78,7 @@ const AdminLogin = () => {
           <div>
             <input
               type="text"
-              name="loginId" // Now "loginId" instead of "ident"
+              name="loginId"
               placeholder="Admin ID or Email"
               value={credentials.loginId}
               onChange={handleChange}
@@ -110,6 +108,14 @@ const AdminLogin = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        {/* Staff Login Button */}
+        <button
+          onClick={() => navigate("/staff/login")}
+          className="mt-4 text-blue-700 hover:underline text-sm"
+        >
+          Staff Login
+        </button>
       </div>
     </div>
   );
