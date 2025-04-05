@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 5000;
 // ✅ Allow both dev & prod origins
 const CLIENT_URLS = [
   "https://kadagam-next.vercel.app",
-  "http://localhost:5173/",
+  "http://localhost:5173",
 ];
 
 app.use(
