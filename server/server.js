@@ -13,7 +13,7 @@ const { connectRedis, redisClient } = require("./config/redisConfig");
 const { initializeWebSocket } = require("./config/websocketConfig");
 const { errorHandler, notFoundHandler } = require("./middlewares/errorMiddleware");
 
-// ✅ Import API Routes
+// ✅ Routes
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -30,7 +30,54 @@ const performanceRoutes = require("./routes/performanceRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL ="https://kadagam-next.vercel.app";
+
+// ✅ Allow both dev & prod origins
+const CLIENT_URLS = [
+  "https://kadagam-next.vercel.app",
+  "http://localhost:5173/",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || CLIENT_URLS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("❌ Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+      "Cache-Control",
+    ],
+  })
+);
+
+// ✅ Handle OPTIONS preflight
+app.options("*", cors());
+
+// ✅ Middleware
+app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(morgan("combined"));
+
+// ✅ Health check
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "UP" });
+});
+
+// ✅ Root
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "🟢 Welcome to Kadagam API! Use /api for API routes." });
+});
 
 // ✅ Connect to MongoDB & Redis
 (async () => {
@@ -50,39 +97,7 @@ const CLIENT_URL ="https://kadagam-next.vercel.app";
   }
 })();
 
-// ✅ Fix CORS Issue (Allow Frontend)
-app.use(
-  cors({
-    origin: CLIENT_URL,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "X-Requested-With",
-      "Accept",
-      "Origin",
-      "Cache-Control",
-    ],
-  })
-);
-
-// ✅ Allow preflight (OPTIONS) requests globally
-app.options("*", cors());
-
-// ✅ Middleware
-app.use(compression()); // Enable compression
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
-app.use(morgan("combined")); // Use combined format for better logging
-
-// ✅ Root Route (Fixes 404 for `/`)
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "🟢 Welcome to Kadagam API! Use /api for API routes." });
-});
-
-// ✅ API Routes
+// ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminLimiter, adminRoutes);
 app.use("/api/staff", adminLimiter, userRoutes);
@@ -97,50 +112,48 @@ app.use("/api/dashboard", adminDashboardRoutes);
 app.use("/api/staff", staffPermissionsRoutes);
 app.use("/api/performance", performanceRoutes);
 
-// ✅ 404 & Error Handling
+// ✅ Error Handlers
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// ✅ Initialize WebSockets
+// ✅ Create HTTP Server
 const server = http.createServer(app);
+
+// ✅ Init WebSocket
 initializeWebSocket(server);
 
 // ✅ Start Server
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌍 API available at http://localhost:${PORT}/api`);
-  console.log(`📡 WebSocket listening on ws://localhost:${PORT}`);
+  console.log(`🌍 API: http://localhost:${PORT}/api`);
+  console.log(`📡 WebSocket: ws://localhost:${PORT}`);
 });
 
 // ✅ Graceful Shutdown
 const shutdownHandler = async (signal) => {
-  console.log(`🔴 Received ${signal}. Closing server...`);
+  console.log(`🔴 Received ${signal}. Shutting down...`);
+
   try {
-    if (redisClient && redisClient.isOpen) {
+    if (redisClient?.isOpen) {
       await redisClient.quit();
-      console.log("🟢 Redis client closed.");
+      console.log("🟢 Redis disconnected.");
     }
-  } catch (error) {
-    console.error("❌ [Redis] Error while closing:", error);
+  } catch (err) {
+    console.error("❌ Redis shutdown error:", err);
   }
 
   try {
-    console.log("🟢 Closing MongoDB connection...");
     await mongoose.connection.close();
-  } catch (error) {
-    console.error("❌ MongoDB Close Error:", error);
+    console.log("🟢 MongoDB disconnected.");
+  } catch (err) {
+    console.error("❌ MongoDB shutdown error:", err);
   }
 
   server.close(() => {
-    console.log("🟢 Server shut down.");
+    console.log("🟢 Server closed.");
     process.exit(0);
   });
 };
 
 process.on("SIGINT", () => shutdownHandler("SIGINT"));
 process.on("SIGTERM", () => shutdownHandler("SIGTERM"));
-
-// ✅ Health Check Endpoint
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "UP" });
-});
